@@ -1,8 +1,4 @@
-#include <CapacitiveSensor.h>
-
 #define TOUCH_PIN 9
-
-CapacitiveSensor touchSensor = CapacitiveSensor(20,9);
 
 byte ledPins[] = {
   5, 2, 19, 16, 12, 8, // inner
@@ -187,7 +183,7 @@ void randomAnimation() {
 }
 
 /**
- * Utility functions
+ * Render functions
  */
 byte _ledFrame = 0;
 
