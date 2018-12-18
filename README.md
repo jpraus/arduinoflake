@@ -1,4 +1,4 @@
-# arduinoflake
+# Arduinoflake
 
 Another decorative PCB? No! Arduinoflake is not only a decoration. It is also a platform. You can use it as a toy, badge, learning kit, game or decoration. Make it a unique, unleash your imagination.
 
