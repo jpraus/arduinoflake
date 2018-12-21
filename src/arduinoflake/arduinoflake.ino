@@ -1,6 +1,6 @@
 #include <CapacitiveSensor.h>
 
-#define BATTERY_SAVE_LEVEL 5 // 1 - the longest lifetime, 18 - the shortest lifetime
+#define BATTERY_LIFETIME 3 // from 1 (~11mA) to 18 (~80mA); 1 - longest lifetime, 18 - shortest lifetime
 
 byte ledPins[] = {
   5, 2, 19, 16, 12, 8, // inner
@@ -240,23 +240,41 @@ void randomAnimation() {
 byte _ledFrame = 0;
 
 void _render() {
-  while (ledState[_ledFrame] == 0) {
-    _ledFrame += 1;
-    if (_ledFrame >= 18) {
-      _ledFrame = 0;
-      return; // nothing to render
+  byte origFrame = _ledFrame;
+  byte ledFrame = _ledFrame;
+
+  byte counter = BATTERY_LIFETIME;
+  do {
+    if (ledState[ledFrame] > 0) {
+      digitalWrite(ledPins[ledFrame], HIGH);
+      counter--;
     }
-  }
+    ledFrame++;
+    if (ledFrame == 18) {
+      ledFrame = 0;
+    }
+  } while (ledFrame != origFrame && counter > 0); // try to render up to counter
+
+  delayMicroseconds(1024);
+
+  counter = BATTERY_LIFETIME;
+  do {
+    if (ledState[_ledFrame] > 0) {
+      digitalWrite(ledPins[_ledFrame], LOW);
+      counter--;
+    }
+    _ledFrame++;
+    if (_ledFrame == 18) {
+      _ledFrame = 0;
+    }
+  } while (_ledFrame != origFrame && counter > 0); // try to render up to counter
 
   // 0 off
   // 1-127 PWM (from off to fully lit)
   // 128 fully lit
   // 129-255 PWM reversed (from fully lit to off)
 
-  for (int i = 0; i < 18; i++) {
-    
-  }
-
+/*
   if (ledState[_ledFrame] == LED_ON) { // fully lit
     digitalWrite(ledPins[_ledFrame], HIGH);
     delayMicroseconds(1024);
@@ -279,6 +297,7 @@ void _render() {
   if (_ledFrame >= 18) {
     _ledFrame = 0;
   }
+*/
 }
 
 void _clearAll() {
