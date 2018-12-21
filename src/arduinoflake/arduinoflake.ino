@@ -43,19 +43,19 @@ byte touchSensitivity = TOUCH_SENSITIVITY_LONG;
 void loop() {
   switch (animation) {
     case 0:
-      glowAnimation();
+      randomAnimation();
       break;
     case 1:
-      loopAnimation();
+      glowAnimation();
       break;
     case 2:
-      snakeAnimation();
+      loopAnimation();
       break;
     case 3:
-      fadingAnimation();
+      snakeAnimation();
       break;
     case 4:
-      randomAnimation();
+      fadingAnimation();
       break;
     default:
       animation = 0;
@@ -84,6 +84,7 @@ void loop() {
 
   // touch handler
   if (touched && !touchHandled) {
+    _clearAll();
     frame = 0;
     animation ++;
     animationChanged = true;
@@ -135,6 +136,11 @@ bool fadingAnimation() {
 byte snakeState = 0;
 
 bool snakeAnimation() {
+  if (animationChanged) {
+    snakeState = 0;
+    animationChanged = false;
+  }
+  
   if (frame < 150) { // speed of animation
     return false;
   }
@@ -177,6 +183,11 @@ bool snakeAnimation() {
 byte loopState = 0;
 
 bool loopAnimation() {
+  if (animationChanged) {
+    loopState = 0;
+    animationChanged = false;
+  }
+  
   if (frame < 150) { // speed of animation
     return false;
   }
@@ -208,6 +219,11 @@ bool loopAnimation() {
 byte lastRandom = 0;
 
 void randomAnimation() {
+  if (animationChanged) {
+    lastRandom = 0;
+    animationChanged = false;
+  }
+
   if (frame < 10) { // speed of animation
     return;
   }
@@ -262,5 +278,11 @@ void _render() {
   _ledFrame += 1;
   if (_ledFrame >= 18) {
     _ledFrame = 0;
+  }
+}
+
+void _clearAll() {
+  for (int i = 0; i < 18; i++) {
+    ledState[i] = LED_OFF; 
   }
 }
