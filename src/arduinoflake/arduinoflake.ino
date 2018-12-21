@@ -1,4 +1,6 @@
-#define TOUCH_PIN 9
+#include <CapacitiveSensor.h>
+
+#define BATTERY_SAVE_LEVEL 5 // 1 - the longest lifetime, 18 - the shortest lifetime
 
 byte ledPins[] = {
   5, 2, 19, 16, 12, 8, // inner
@@ -12,9 +14,17 @@ byte ledPins[] = {
 
 byte ledState[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // inner, middle, edge
 
+#define TOUCH_PIN_SEND 13
+#define TOUCH_PIN_RECEIVE 9
+#define TOUCH_THRESHOLD 8
+
+#define TOUCH_SENSITIVITY_LONG 20
+#define TOUCH_SENSITIVITY_SHORT 3
+
+CapacitiveSensor touchButton = CapacitiveSensor(TOUCH_PIN_SEND, TOUCH_PIN_RECEIVE);
+
 void setup() {
-  pinMode(TOUCH_PIN, INPUT);
-  digitalWrite(TOUCH_PIN, LOW);
+  touchButton.set_CS_AutocaL_Millis(0xFFFFFFFF); // turn of auto-callibration
 
   for (int i = 0; i < 18; i++) {
     pinMode(ledPins[i], OUTPUT);
@@ -22,8 +32,13 @@ void setup() {
 }
 
 bool animationChanged = true;
-byte animation = 2;
+byte animation = 0;
 byte frame = 0;
+
+boolean touched = false;
+boolean touchHandled = false;
+byte touchCounter = 0;
+byte touchSensitivity = TOUCH_SENSITIVITY_LONG;
 
 void loop() {
   switch (animation) {
@@ -31,27 +46,49 @@ void loop() {
       glowAnimation();
       break;
     case 1:
-      circleAnimation();
+      loopAnimation();
       break;
     case 2:
       snakeAnimation();
       break;
     case 3:
-      loopAnimation();
+      fadingAnimation();
       break;
     case 4:
       randomAnimation();
-      break;
-    case 5: 
-      //glowAnimation();
       break;
     default:
       animation = 0;
       break;
   }
   _render();
-  frame++;
-  animationChanged = false;
+  frame ++;
+
+  // touch button recognition
+  long touchValue = touchButton.capacitiveSensor(1);
+  if (touchValue > TOUCH_THRESHOLD) { // touched
+    if (touchCounter > touchSensitivity) { // touched - prevention from random anomally
+      touched = true;
+    }
+    else {
+      touchCounter ++;
+    }
+  }
+  else if (touchCounter > 0) {
+    touchCounter --;
+  }
+  else {
+    touched = false;
+    touchHandled = false;
+  }
+
+  // touch handler
+  if (touched && !touchHandled) {
+    frame = 0;
+    animation ++;
+    animationChanged = true;
+    touchHandled = true;
+  }
 }
 
 void glowAnimation() {
@@ -59,16 +96,14 @@ void glowAnimation() {
     for (int i = 0; i < 18; i ++) {
       ledState[i] = LED_ON;
     }
-    
+    animationChanged = false;
   }
 }
-
-byte circleState = 0;
 
 /**
  * Circles animation - circles from center to the edges
  */
-bool circleAnimation() {
+bool fadingAnimation() {
   if (animationChanged) {
     for (int i = 0; i < 6; i ++) {
       ledState[i] = 128;
@@ -79,6 +114,7 @@ bool circleAnimation() {
     for (int i = 12; i < 18; i ++) {
       ledState[i] = 0;
     }
+    animationChanged = false;
   }
 
   if (frame < 10) { // speed of animation
@@ -200,6 +236,10 @@ void _render() {
   // 1-127 PWM (from off to fully lit)
   // 128 fully lit
   // 129-255 PWM reversed (from fully lit to off)
+
+  for (int i = 0; i < 18; i++) {
+    
+  }
 
   if (ledState[_ledFrame] == LED_ON) { // fully lit
     digitalWrite(ledPins[_ledFrame], HIGH);
