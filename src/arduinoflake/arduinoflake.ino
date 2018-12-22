@@ -29,6 +29,8 @@ byte touchSensitivity = TOUCH_SENSITIVITY;
 int touchStrength = 0;
 
 void setup() {
+  randomSeed(analogRead(A7));
+  
   snowflake.setup();
   flakeSnake.restart();
   touchButton.set_CS_AutocaL_Millis(0xFFFFFFFF); // turn of auto-callibration
