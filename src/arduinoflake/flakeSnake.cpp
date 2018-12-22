@@ -8,20 +8,14 @@
 void FLAKE_SNAKE::update(byte &frame) {
   // effect
   if (effectCountDown > 0) {
-    if (frame >= 50) { // speed of effect
-      frame = 0; 
-
-      effectCountDown --;
-
-      if (mode == MODE_EATEN) {
-        eatenEffect(effectCountDown);
-      }
-      else if (mode == MODE_WON) {
-        wonEffect(effectCountDown);
-      }
-      else if (mode == MODE_LOST) {
-        lostEffect(effectCountDown);
-      }
+    if (mode == MODE_EATEN) {
+      eatenEffect(frame);
+    }
+    else if (mode == MODE_WON) {
+      wonEffect(frame);
+    }
+    else if (mode == MODE_LOST) {
+      lostEffect(frame);
     }
   }
 
@@ -94,28 +88,43 @@ void FLAKE_SNAKE::repaint() {
   canvas.set(fruitAt + 12, LED_ON);
 }
 
-void FLAKE_SNAKE::eatenEffect(byte frame) {
-  byte state = (frame % 2 == 0) ? LED_OFF : LED_ON;
-  canvas.setByRange(12, 18, state);
-}
+void FLAKE_SNAKE::eatenEffect(byte &frame) {
+  if (frame >= 50) { // speed of effect
+    frame = 0; 
+    effectCountDown --;
 
-void FLAKE_SNAKE::lostEffect(byte frame) {
-  byte state = (frame % 2 == 0) ? LED_OFF : LED_ON;
-  byte ledPin = snakeAt;
-
-  for (int i = 0; i < snakeLength; i++) {
-    canvas.set(ledPin, state); // body
-    ledPin = prevLed(ledPin);
+    byte state = (effectCountDown % 2 == 0) ? LED_OFF : LED_ON;
+    canvas.setByRange(12, 18, state);
   }
-  canvas.set(snakeAt + 6, state); // mouth
 }
 
-void FLAKE_SNAKE::wonEffect(byte frame) {
-  byte state = (frame % 2 == 0) ? LED_OFF : LED_ON;
-  canvas.setByRange(0, 6, state);
+void FLAKE_SNAKE::lostEffect(byte &frame) {
+  if (frame >= 100) { // speed of effect
+    frame = 0; 
+    effectCountDown --;
 
-  state = (frame % 2 == 0) ? LED_ON : LED_OFF;
-  canvas.setByRange(12, 18, state);
+    byte state = (effectCountDown % 2 == 0) ? LED_OFF : LED_ON;
+    byte ledPin = snakeAt;
+  
+    for (int i = 0; i < snakeLength; i++) {
+      canvas.set(ledPin, state); // body
+      ledPin = prevLed(ledPin);
+    }
+    canvas.set(snakeAt + 6, state); // mouth
+  }
+}
+
+void FLAKE_SNAKE::wonEffect(byte &frame) {
+  if (frame >= 50) { // speed of effect
+    frame = 0; 
+    effectCountDown --;
+
+    byte state = (effectCountDown % 2 == 0) ? LED_OFF : LED_ON;
+    canvas.setByRange(0, 6, state);
+  
+    state = (effectCountDown % 2 == 0) ? LED_ON : LED_OFF;
+    canvas.setByRange(12, 18, state);
+  }
 }
 
 byte FLAKE_SNAKE::nextLed(byte ledPin) {

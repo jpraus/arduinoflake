@@ -25,9 +25,9 @@ class FLAKE_SNAKE {
 
     void moveSnake();
     void repaint();
-    void eatenEffect(byte frame);
-    void lostEffect(byte frame);
-    void wonEffect(byte frame);    
+    void eatenEffect(byte &frame);
+    void lostEffect(byte &frame);
+    void wonEffect(byte &frame);    
     byte nextLed(byte ledPin);
     byte prevLed(byte ledPin);
 };

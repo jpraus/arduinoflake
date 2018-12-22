@@ -4,62 +4,78 @@
 
 #define BATTERY_LIFETIME 3 // from 1 (~11mA) to 18 (~80mA); 1 - longest lifetime, 18 - shortest lifetime
 
+#define MODE_ANIMATIONS 0
+#define MODE_SNAKE 1
+
 #define TOUCH_PIN_SEND 13
 #define TOUCH_PIN_RECEIVE 9
 #define TOUCH_THRESHOLD 8
-
-#define TOUCH_SENSITIVITY_LONG 20
-#define TOUCH_SENSITIVITY_SHORT 3
+#define TOUCH_SENSITIVITY 5 // 3 short, 20 long
 
 CANVAS snowflake(BATTERY_LIFETIME);
 CapacitiveSensor touchButton = CapacitiveSensor(TOUCH_PIN_SEND, TOUCH_PIN_RECEIVE);
 FLAKE_SNAKE flakeSnake(&snowflake);
 
+byte mode = MODE_ANIMATIONS;
 bool animationChanged = true;
 byte animation = 0;
 byte frame = 0;
 
 boolean touched = false;
 boolean touchHandled = false;
+boolean touchStart = false;
 byte touchCounter = 0;
-byte touchSensitivity = TOUCH_SENSITIVITY_LONG;
+byte touchSensitivity = TOUCH_SENSITIVITY;
+int touchStrength = 0;
 
 void setup() {
   snowflake.setup();
   flakeSnake.restart();
   touchButton.set_CS_AutocaL_Millis(0xFFFFFFFF); // turn of auto-callibration
+
+  animation = random(0, 6);
+  mode = MODE_ANIMATIONS;
 }
 
 void loop() {
-  switch (animation) {
-    case 0:
-      flakeSnake.update(frame);
-      //randomAnimation();
-      break;
-    case 1:
-      glowAnimation();
-      break;
-    case 2:
-      loopAnimation();
-      break;
-    case 3:
-      snakeAnimation();
-      break;
-    case 4:
-      fadingAnimation();
-      break;
-    default:
-      animation = 0;
-      break;
+  if (mode == MODE_ANIMATIONS) {
+    switch (animation) {
+      case 0:
+        randomAnimation();
+        break;
+      case 1:
+        glowAnimation();
+        break;
+      case 2:
+        loopAnimation();
+        break;
+      case 3:
+        circleAnimation(true);
+        break;
+      case 4:
+        fanAnimation();
+        break;
+      case 5:
+        circleAnimation(false);
+        break;
+      default:
+        animation = 0;
+        break;
+    }
   }
+  else if (mode == MODE_SNAKE) {
+    flakeSnake.update(frame);
+  }
+
   snowflake.render();
   frame ++;
 
   // touch button recognition
   long touchValue = touchButton.capacitiveSensor(1);
   if (touchValue > TOUCH_THRESHOLD) { // touched
-    if (touchCounter > touchSensitivity) { // touched - prevention from random anomally
-      touched = true;
+    if (touchCounter > TOUCH_SENSITIVITY) { // touched - prevention from random anomally
+      touchStrength ++;
+      touchStart = true;
     }
     else {
       touchCounter ++;
@@ -68,23 +84,44 @@ void loop() {
   else if (touchCounter > 0) {
     touchCounter --;
   }
+  else if (touchStart) {
+    touchStart = false;
+    touched = true;
+  }
   else {
     touched = false;
     touchHandled = false;
   }
 
+  // long touch to change to snake
+  if (mode == MODE_ANIMATIONS && touchStrength > 1000) {
+    frame = 0;
+    mode = MODE_SNAKE;
+    flakeSnake.restart();
+    touchHandled = true;
+  }
+  if (mode == MODE_SNAKE && touchStart) {
+    touched = true; // touched on touch down in game mode
+  }
+
   // touch handler
   if (touched && !touchHandled) {
-    flakeSnake.handleTouch();
-    
-    //snowflake.clear();
-    //frame = 0;
-    //animation ++;
-    //animationChanged = true;
+    if (mode == MODE_ANIMATIONS) {
+      frame = 0;
+      animation ++;
+      animationChanged = true;
+    }
+    else if (mode == MODE_SNAKE) {
+      flakeSnake.handleTouch(); 
+    }
     touchHandled = true;
+    touchStrength = 0;
   }
 }
 
+/**
+ * Glow animation - fully lit snowflake
+ */
 void glowAnimation() {
   if (animationChanged) {
     snowflake.setByRange(0, 18, 128);
@@ -95,24 +132,37 @@ void glowAnimation() {
 /**
  * Circles animation - circles from center to the edges
  */
-bool fadingAnimation() {
+byte circleIndex = 0;
+
+void circleAnimation(bool bounce) {
   if (animationChanged) {
-    snowflake.setByRange(0, 6, 128);
-    snowflake.setByRange(6, 12, 64);
-    snowflake.setByRange(12, 18, 0);
+    circleIndex = 0;
     animationChanged = false;
   }
 
-  if (frame < 10) { // speed of animation
-    return false;
+  if (frame < 255) { // speed of animation
+    return;
   }
   frame = 0;
 
-  for (int i = 0; i < 18; i ++) {
-    //ledState[i]++;
+  snowflake.clear();
+  switch (circleIndex) {
+    case 0:
+      snowflake.setByRange(0, 6, LED_ON);
+      break;
+    case 1:
+    case 3:
+      snowflake.setByRange(6, 12, LED_ON);
+      break;
+    case 2:
+      snowflake.setByRange(12, 18, LED_ON);
+      break;
   }
 
-  return true;
+  circleIndex ++;
+  if (circleIndex == 3 && !bounce || circleIndex >= 4) {
+    circleIndex = 0;
+  }
 }
 
 /**
@@ -139,22 +189,18 @@ bool snakeAnimation() {
       snowflake.set(i, (i >= snakeState - 12 && i < snakeState - 9) ? LED_ON : LED_OFF);
     }
   }
-  if (snakeState >= 22 && snakeState < 25) {
-    snowflake.set(5, LED_ON);
-  }
-  if (snakeState >= 23) {
+  if (snakeState >= 22) {
     snowflake.set(0, LED_ON);
   }
-  if (snakeState >= 24) {
+  if (snakeState >= 23) {
     snowflake.set(1, LED_ON);
   }
-  if (snakeState >= 25) {
+  if (snakeState >= 24) {
     snowflake.set(2, LED_ON);
-    snowflake.set(5, LED_OFF);
   }
 
   snakeState += 1;
-  if (snakeState >= 25) {
+  if (snakeState >= 24) {
     snakeState = 0;
     return true; // finsihed
   }
@@ -196,6 +242,34 @@ bool loopAnimation() {
   }
 
   return false;
+}
+
+
+/**
+ * Fan animation - spining rotor of a fan
+ */
+byte fanIndex = 0;
+
+void fanAnimation() {
+  if (animationChanged) {
+    fanIndex = 0;
+    animationChanged = false;
+  }
+
+  if (frame < 80) { // speed of animation
+    return;
+  }
+  frame = 0;
+
+  snowflake.clear();
+  for (byte i = fanIndex; i < 18; i += 3) {
+    snowflake.set(i, LED_ON);
+  }
+
+  fanIndex ++;
+  if (fanIndex >= 3) {
+    fanIndex = 0;
+  }
 }
 
 /**
