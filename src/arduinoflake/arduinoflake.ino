@@ -2,7 +2,8 @@
 #include "flakeSnake.h"
 #include <CapacitiveSensor.h>
 
-#define BATTERY_LIFETIME 3 // from 1 (~11mA) to 18 (~80mA); 1 - longest lifetime, 18 - shortest lifetime
+// 1 for CR2032, 5 for 2xAAA
+#define BATTERY_LIFETIME 1 // from 1 (~11mA) to 18 (~80mA); 1 - longest lifetime, 18 - shortest lifetime
 
 #define MODE_ANIMATIONS 0
 #define MODE_SNAKE 1

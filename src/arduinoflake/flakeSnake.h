@@ -4,7 +4,6 @@
 #include "Arduino.h"
 #include "canvas.h"
 
-
 class FLAKE_SNAKE {
   public:
     FLAKE_SNAKE(CANVAS *canvas):
@@ -22,6 +21,7 @@ class FLAKE_SNAKE {
     byte snakeAt = 0; // pin at which snake currently has head
     byte snakeLength = 2;
     byte fruitAt = random(0, 6); // pin where the fruit is
+    byte difficulty = 250; // speed of gameplay
 
     void moveSnake();
     void repaint();

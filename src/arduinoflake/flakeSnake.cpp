@@ -1,5 +1,8 @@
 #include "flakeSnake.h"
 
+#define DIFFICULTY_EASY 250
+#define DIFFICULTY_STEP 60
+
 #define MODE_RUN 0
 #define MODE_EATEN 1
 #define MODE_LOST 2
@@ -20,7 +23,7 @@ void FLAKE_SNAKE::update(byte &frame) {
   }
 
   // gameplay
-  else if (frame >= 250) { // speed of gameplay
+  else if (frame >= difficulty) { // speed of gameplay
     frame = 0;
     moveSnake();    
   }
@@ -35,7 +38,7 @@ void FLAKE_SNAKE::restart() {
 
 void FLAKE_SNAKE::moveSnake() {
   if (mode == MODE_EATEN && snakeLength == 5) {
-    effectCountDown = 100;
+    effectCountDown = 50;
     mode = MODE_WON;
   }
   else if (mode == MODE_EATEN) {
@@ -44,7 +47,14 @@ void FLAKE_SNAKE::moveSnake() {
     fruitAt = random(0, 6);
     mode = MODE_RUN;
   }
-  else if (mode == MODE_LOST || mode == MODE_WON) {
+  else if (mode == MODE_WON) {
+    if (difficulty > DIFFICULTY_STEP) {
+      difficulty -= DIFFICULTY_STEP;
+    }
+    restart();
+  }
+  else if (mode == MODE_LOST) {
+    difficulty = DIFFICULTY_EASY;
     restart();
   }
   else if (mode == MODE_RUN) {
