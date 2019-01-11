@@ -3,7 +3,7 @@
 #include <CapacitiveSensor.h>
 
 // 1 for CR2032, 5 for 2xAAA
-#define BATTERY_LIFETIME 1 // from 1 (~11mA) to 18 (~80mA); 1 - longest lifetime, 18 - shortest lifetime
+#define BATTERY_LIFETIME 2 // from 1 (~11mA) to 18 (~80mA); 1 - longest lifetime, 18 - shortest lifetime
 
 #define MODE_ANIMATIONS 0
 #define MODE_SNAKE 1
@@ -113,6 +113,7 @@ void loop() {
       frame = 0;
       animation ++;
       animationChanged = true;
+      snowflake.clear();
     }
     else if (mode == MODE_SNAKE) {
       flakeSnake.handleTouch(); 
