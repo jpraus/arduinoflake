@@ -2,9 +2,9 @@
 
 // TODO: move this somewhere else
 byte ledPins[] = {
-  8, 5, 2, 19, 16, 12, // inner
-  7, 4, 0, 17, 14, 10, // middle
-  6, 3, 1, 18, 15, 11  // outer
+  9, 6, 2, 19, 16, 12, // inner
+  8, 4, 0, 17, 14, 10, // middle
+  7, 5, 1, 18, 15, 11  // outer
 };
 
 CANVAS::CANVAS(byte _numLedsAtOnce) {

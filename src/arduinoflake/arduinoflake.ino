@@ -1,20 +1,17 @@
 #include "canvas.h"
 #include "flakeSnake.h"
-#include <CapacitiveSensor.h>
 
-// 1 for CR2032, 5 for 2xAAA
+// 2 for CR2032, 5 for 2xAAA
 #define BATTERY_LIFETIME 2 // from 1 (~11mA) to 18 (~80mA); 1 - longest lifetime, 18 - shortest lifetime
 
 #define MODE_ANIMATIONS 0
 #define MODE_SNAKE 1
 
-#define TOUCH_PIN_SEND 13
-#define TOUCH_PIN_RECEIVE 9
-#define TOUCH_THRESHOLD 8
-#define TOUCH_SENSITIVITY 5 // 3 short, 20 long
+#define TOUCH_SENSOR_PIN 3
+#define TOUCH_MODE_ON_UP 0 // recognize touch on touch up
+#define TOUCH_MODE_ON_DOWN 1 // recognize touch on touch down
 
 CANVAS snowflake(BATTERY_LIFETIME);
-CapacitiveSensor touchButton = CapacitiveSensor(TOUCH_PIN_SEND, TOUCH_PIN_RECEIVE);
 FLAKE_SNAKE flakeSnake(&snowflake);
 
 byte mode = MODE_ANIMATIONS;
@@ -22,22 +19,23 @@ bool animationChanged = true;
 byte animation = 0;
 byte frame = 0;
 
+byte touchMode = TOUCH_MODE_ON_UP;
+unsigned long touchStartMs = 0;
+unsigned long touchDuration = 0;
 boolean touched = false;
-boolean touchHandled = false;
-boolean touchStart = false;
-byte touchCounter = 0;
-byte touchSensitivity = TOUCH_SENSITIVITY;
-int touchStrength = 0;
+boolean touchHandled = true;
 
 void setup() {
   randomSeed(analogRead(A7));
   
   snowflake.setup();
   flakeSnake.restart();
-  touchButton.set_CS_AutocaL_Millis(0xFFFFFFFF); // turn of auto-callibration
 
   animation = random(0, 6);
   mode = MODE_ANIMATIONS;
+
+  pinMode(3, INPUT);
+  attachInterrupt(digitalPinToInterrupt(3), touchISR, CHANGE);
 }
 
 void loop() {
@@ -73,43 +71,15 @@ void loop() {
   snowflake.render();
   frame ++;
 
-  // touch button recognition
-  long touchValue = touchButton.capacitiveSensor(1);
-  if (touchValue > TOUCH_THRESHOLD) { // touched
-    if (touchCounter > TOUCH_SENSITIVITY) { // touched - prevention from random anomally
-      touchStrength ++;
-      touchStart = true;
-    }
-    else {
-      touchCounter ++;
-    }
-  }
-  else if (touchCounter > 0) {
-    touchCounter --;
-  }
-  else if (touchStart) {
-    touchStart = false;
-    touched = true;
-  }
-  else {
-    touched = false;
-    touchHandled = false;
-  }
-
-  // long touch to change to snake
-  if (mode == MODE_ANIMATIONS && touchStrength > 1000) {
-    frame = 0;
-    mode = MODE_SNAKE;
-    flakeSnake.restart();
-    touchHandled = true;
-  }
-  if (mode == MODE_SNAKE && touchStart) {
-    touched = true; // touched on touch down in game mode
-  }
-
-  // touch handler
+  // handle touch
   if (touched && !touchHandled) {
-    if (mode == MODE_ANIMATIONS) {
+    if (mode == MODE_ANIMATIONS && touchDuration > 1000) { // long touch to change to snake
+      frame = 0;
+      mode = MODE_SNAKE;
+      flakeSnake.restart();
+      touchMode = TOUCH_MODE_ON_DOWN;
+    }
+    else if (mode == MODE_ANIMATIONS) {
       frame = 0;
       animation ++;
       animationChanged = true;
@@ -118,8 +88,32 @@ void loop() {
     else if (mode == MODE_SNAKE) {
       flakeSnake.handleTouch(); 
     }
+
     touchHandled = true;
-    touchStrength = 0;
+  }
+}
+
+
+void touchISR() {
+  byte touchOn = digitalRead(3);
+  if (touched && !touchHandled) {
+    return; // previous touch was not handled yet.
+  }
+  if (touchOn == HIGH) {
+    if (touchMode == TOUCH_MODE_ON_DOWN) {
+      touched = true;
+      touchHandled = false;
+    }
+    else if (touchMode == TOUCH_MODE_ON_UP) {
+      touchStartMs = millis();
+      touchDuration = 0;
+    }
+  }
+  else if (touchStartMs > 0 && touchMode == TOUCH_MODE_ON_UP) {
+    touchDuration = millis() - touchStartMs;
+    touchStartMs = 0;
+    touched = true;
+    touchHandled = false;
   }
 }
 
@@ -260,7 +254,7 @@ void fanAnimation() {
     animationChanged = false;
   }
 
-  if (frame < 80) { // speed of animation
+  if (frame < 255) { // speed of animation
     return;
   }
   frame = 0;
