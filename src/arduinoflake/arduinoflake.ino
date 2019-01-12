@@ -254,7 +254,7 @@ void fanAnimation() {
     animationChanged = false;
   }
 
-  if (frame < 255) { // speed of animation
+  if (frame < 90) { // speed of animation
     return;
   }
   frame = 0;
