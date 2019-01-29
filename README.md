@@ -56,9 +56,28 @@ There is an ISCP interface in the left corner on the back of Arduinoflake. You c
   <em>AVR ISCP programming interface</em>
 </p>
 
-### Arduino as ISP
+### Arduino as ISP (alternative to USBasp)
 
 You can turn common Arduino UNO or any other Arduino board into programming hardware. its a bit messy, but does not require special hardware. [Read](https://www.arduino.cc/en/tutorial/arduinoISP) how to turn your Arduino UNO into a programmer. The rest is same as with USBasp.
 
+### Installing MiniCore
+
+It's time to start your Arduino IDE. In order to be able to program Arduinoflake, you need to first add support for ATmega8 device into Arduino IDE and configure it. 
+
+- Install [MCUdude/MiniCore](https://github.com/MCUdude/MiniCore#how-to-install) device library 
+- Open Tools > Boards and select ATmega8
+- Select Tools > Bootloader > No
+- Select Tools > Clock > 8 MHz internal
+- Select Tools > BOD > Disabled
+
+![Arduino IDE ATmega8](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-atmega8.png)
+
+### First upload
+
+Checkout this repository open [arduinoflake.ino](src/arduinoflake/arduinoflake.ino) project file and hit Sketch > Upload Using Programmer. You should get a sweet *'avrdude done. Thank you.'* message at the end of the console.
+
+![Arduino IDE upload](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-upload.png)
+
+## Getting started with the Arduinoflake library
 
 ... robots are building this page
