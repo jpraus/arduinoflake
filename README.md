@@ -65,10 +65,10 @@ You can turn common Arduino UNO or any other Arduino board into programming hard
 It's time to start your Arduino IDE. In order to be able to program Arduinoflake, you need to first add support for ATmega8 device into Arduino IDE and configure it. 
 
 - Install [MCUdude/MiniCore](https://github.com/MCUdude/MiniCore#how-to-install) device library 
-- Open Tools > Boards and select ATmega8
-- Select Tools > Bootloader > No
-- Select Tools > Clock > 8 MHz internal
-- Select Tools > BOD > Disabled
+- Open **Tools > Boards** and select **ATmega8**
+- Select **Tools > Bootloader > No**
+- Select **Tools > Clock > 8 MHz internal**
+- Select **Tools > BOD > Disabled**
 
 ![Arduino IDE ATmega8](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-atmega8.png)
 
