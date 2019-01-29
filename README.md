@@ -45,7 +45,7 @@ Arduinoflake consists of 30 white LEDs grouped into 18 segments. Each group is c
 
 Arduinoflake can be programmed using Arduino IDE. In order to do so, you need to have a programmer - special hardware to upload code to microchip - and library installed in Arduino IDE.
 
-# USBasp
+### USBasp
 
 [USBasp](https://www.fischl.de/usbasp/) is a cheap $1 board that allows you to connect any ATmega chip with your computer via USB. Including Arduinoflake. It translates USB commands into AVR ISCP commands that can program the processor.
 
@@ -56,7 +56,7 @@ There is an ISCP interface in the left corner on the back of Arduinoflake. You c
   <em>AVR ISCP programming interface</em>
 </p>
 
-# Arduino as ISP
+### Arduino as ISP
 
 You can turn common Arduino UNO or any other Arduino board into programming hardware. its a bit messy, but does not require special hardware. [Read](https://www.arduino.cc/en/tutorial/arduinoISP) how to turn your Arduino UNO into a programmer. The rest is same as with USBasp.
 
