@@ -35,3 +35,10 @@ The second option is to manufacture the PCB and get all necessary parts yourself
 ## Understanding Arduinoflake hardware
 
 Arduinoflake consists of 30 white LEDs grouped into 18 segments. Each segment is connected to one of the ATmega8 output pins and can be programmatically controlled.  The touch button is handled by standalone TTP223 integrated circuit and is connected to PD3 input pin with interrupt support.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/pin-mapping.png" /><br />
+  <em>Arduinoflake LED segments to ATmega8 digital pins mapping</em>
+</p>
+
+
