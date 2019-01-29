@@ -18,7 +18,7 @@ Sponsored by [PCBWay](https://www.pcbway.com/) - PCB prototype the easy way.
 
 The easiest way how to get your own snowflake is to order a DIY kit on my [Tindie Store](https://www.tindie.com/products/jiripraus/arduinoflake/). Kit contains professionally manufactured PCBs by PCBway and all compatible components needed to assemble a fully functional Arduinoflake.
 
-The second option is to manufacture the PCB and get all necessary parts yourself. Arduinoflake is Open-Source. Schema and Gerber files are included in this repository. Don't forget to share your creation with me, I would love to see that!
+The second option is to manufacture the PCB and get all necessary parts yourself. Arduinoflake is Open-Source. [Schematic](doc/schematic.png) and [Gerber files](gerber/) are included in this repository. Don't forget to share your creation with me, I would love to see that!
 
 ### Parts list
 
@@ -34,11 +34,31 @@ The second option is to manufacture the PCB and get all necessary parts yourself
 
 ## Understanding Arduinoflake hardware
 
-Arduinoflake consists of 30 white LEDs grouped into 18 segments. Each segment is connected to one of the ATmega8 output pins and can be programmatically controlled.  The touch button is handled by standalone TTP223 integrated circuit and is connected to PD3 input pin with interrupt support.
+Arduinoflake consists of 30 white LEDs grouped into 18 segments. Each group is connected to one of the ATmega8 output pins and can be programmatically controlled.  The touch button is handled by standalone TTP223 integrated circuit and is connected to PD3 input pin with interrupt support.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/pin-mapping.png" /><br />
-  <em>Arduinoflake LED segments to ATmega8 digital pins mapping</em>
+  <em>Arduinoflake LED groups to ATmega8 digital pins mapping</em>
 </p>
 
+## Preparing your environment
 
+Arduinoflake can be programmed using Arduino IDE. In order to do so, you need to have a programmer - special hardware to upload code to microchip - and library installed in Arduino IDE.
+
+# USBasp
+
+[USBasp](https://www.fischl.de/usbasp/) is a cheap $1 board that allows you to connect any ATmega chip with your computer via USB. Including Arduinoflake. It translates USB commands into AVR ISCP commands that can program the processor.
+
+There is an ISCP interface in the left corner on the back of Arduinoflake. You can either use pogo pins if you have those or solder 6-pin header directly to the board to easily connect your ISCP cable. Before powering it up don't forget to change power on USBasp board to 3.3V.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/iscp.png" /><br />
+  <em>AVR ISCP programming interface</em>
+</p>
+
+# Arduino as ISP
+
+You can turn common Arduino UNO or any other Arduino board into programming hardware. its a bit messy, but does not require special hardware. [Read](https://www.arduino.cc/en/tutorial/arduinoISP) how to turn your Arduino UNO into a programmer. The rest is same as with USBasp.
+
+
+... robots are building this page
