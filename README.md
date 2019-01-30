@@ -69,12 +69,13 @@ It's time to start your Arduino IDE. In order to be able to program Arduinoflake
 - Select **Tools > Bootloader > No**
 - Select **Tools > Clock > 8 MHz internal**
 - Select **Tools > BOD > Disabled**
+- If you are not working with a Kit run **Tools > Burn Bootloader**
 
 ![Arduino IDE ATmega8](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-atmega8.png)
 
 ### First upload
 
-Checkout this repository and open [arduinoflake.ino](src/arduinoflake/arduinoflake.ino) project file. Select **Sketch > Upload Using Programmer**. You should get a sweet *'avrdude done. Thank you.'* message at the end of the console. Now you can make your own personalized Arduinoflake.
+Checkout this repository and open [arduinoflake.ino](src/arduinoflake/arduinoflake.ino) project file. Run **Sketch > Upload Using Programmer**. You should get a sweet *'avrdude done. Thank you.'* message at the end of the console. Now you can make your own personalized Arduinoflake.
 
 ![Arduino IDE upload](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-upload.png)
 
@@ -113,12 +114,12 @@ Need to be called every 1ms in project's loop() function to be able toproperly c
 ```
 void set(byte index, byte value);
 ```
-Set brightness *value* to LED on *index*, use LED_ON or LED_OFF constant for value.
+Set brightness *value* to LED on *index*. Use LED_ON or LED_OFF constant for value.
 
 ```
 void setByRange(byte fromIndex, byte toIndex, byte value);
 ```
-Set brightness *value* to LEDs on indeces <*fromIndex*, *toIndex*), use LED_ON or LED_OFF constant for value.
+Set brightness *value* to LEDs on indeces <*fromIndex*, *toIndex*). Use LED_ON or LED_OFF constant for value.
 
 ```
 void clear();
@@ -129,3 +130,9 @@ Turn off all LEDs.
   <img src="https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/led-indeces.png" /><br />
   <em>Arduinoflake LED groups indexes used in library</em>
 </p>
+
+## Backlog
+
+- [ ] Add touch button abstraction to hardware class
+- [ ] Add support for PWM
+- [ ] Add more animations
