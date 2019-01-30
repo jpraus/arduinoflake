@@ -74,10 +74,58 @@ It's time to start your Arduino IDE. In order to be able to program Arduinoflake
 
 ### First upload
 
-Checkout this repository open [arduinoflake.ino](src/arduinoflake/arduinoflake.ino) project file and hit Sketch > Upload Using Programmer. You should get a sweet *'avrdude done. Thank you.'* message at the end of the console.
+Checkout this repository and open [arduinoflake.ino](src/arduinoflake/arduinoflake.ino) project file. Select **Sketch > Upload Using Programmer**. You should get a sweet *'avrdude done. Thank you.'* message at the end of the console. Now you can make your own personalized Arduinoflake.
 
 ![Arduino IDE upload](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-upload.png)
 
 ## Getting started with the Arduinoflake library
 
-... robots are building this page
+Getting started with the Arduinoflake library
+Arduinoflake comes with handy [canvas.cpp](src/arduinoflake/canvas.cpp) class which creates an abstraction over the Arduinoflake hardware. You will use it to paint your Arduinoflake with lights.
+
+### Features
+
+- LEDs are addressed with index (0-18)
+- setup single LED
+- setup range of LEDs
+- power management
+- software PWM for each LED (to be done)
+- touch button abstraction (to be done)
+
+### Constructor
+```
+CANVAS(byte numLedsAtOnce);
+```
+- **numLedsAtOnce** - power saving factor, number between 1-18, high number high power consumption but also brighther LEDs
+
+### Basic functions
+```
+void setup()
+```
+Need to be called in project's setup() function to setup hardware.
+
+```
+void render()
+```
+Need to be called every 1ms in project's loop() function to be able toproperly control LEDs.
+
+### Draw functions
+```
+void set(byte index, byte value);
+```
+Set brightness *value* to LED on *index*, use LED_ON or LED_OFF constant for value.
+
+```
+void setByRange(byte fromIndex, byte toIndex, byte value);
+```
+Set brightness *value* to LEDs on indeces <*fromIndex*, *toIndex*), use LED_ON or LED_OFF constant for value.
+
+```
+void clear();
+```
+Turn off all LEDs.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/led-indeces.png" /><br />
+  <em>Arduinoflake LED groups indexes used in library</em>
+</p>
