@@ -2,7 +2,7 @@
 
 // TODO: move this somewhere else
 byte ledPins[] = {
-  9, 6, 2, 19, 16, 12, // inner
+  9, 6, 2, 19, 16, 13, // inner (12 -> 13 rev4)
   8, 4, 0, 17, 14, 10, // middle
   7, 5, 1, 18, 15, 11  // outer
 };
@@ -47,7 +47,7 @@ void CANVAS::render() {
       counter--;
     }
     ledFrameTmp++;
-    if (ledFrameTmp == 18) {
+    if (ledFrameTmp == LEDS_COUNT) {
       ledFrameTmp = 0;
     }
   } while (ledFrameTmp != origFrame && counter > 0); // try to render up to counter
@@ -61,7 +61,7 @@ void CANVAS::render() {
       counter--;
     }
     ledFrame++;
-    if (ledFrame == 18) {
+    if (ledFrame == LEDS_COUNT) {
       ledFrame = 0;
     }
   } while (ledFrame != origFrame && counter > 0); // try to render up to counter

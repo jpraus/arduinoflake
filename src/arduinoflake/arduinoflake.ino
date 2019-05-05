@@ -5,6 +5,8 @@
 #define BATTERY_LIFETIME 2 // from 1 (~11mA) to 18 (~80mA); 1 - longest lifetime, 18 - shortest lifetime
 
 #define MODE_ANIMATIONS 0
+
+
 #define MODE_SNAKE 1
 
 #define TOUCH_SENSOR_PIN 3
@@ -34,8 +36,8 @@ void setup() {
   animation = random(0, 6);
   mode = MODE_ANIMATIONS;
 
-  pinMode(3, INPUT);
-  attachInterrupt(digitalPinToInterrupt(3), touchISR, CHANGE);
+  pinMode(TOUCH_SENSOR_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(TOUCH_SENSOR_PIN), touchISR, CHANGE);
 }
 
 void loop() {
@@ -95,7 +97,7 @@ void loop() {
 
 
 void touchISR() {
-  byte touchOn = digitalRead(3);
+  byte touchOn = digitalRead(TOUCH_SENSOR_PIN);
   if (touched && !touchHandled) {
     return; // previous touch was not handled yet.
   }
