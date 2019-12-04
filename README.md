@@ -4,14 +4,13 @@ Arduinoflake is an awesome winter decoration that will light up every dark night
 
 ![Arduinoflakes](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/PC172551.JPG)
 
-Sponsored by [PCBWay](https://www.pcbway.com/) - PCB prototype the easy way.
-
 ## Features
 
 - 30 LEDs grouped into 18 independent segments
 - touch button for interactions
 - ATmega8 Arduino compatible microprocessor
-- AVR ISCP programming interface
+- micro USB interface for programming (CH340 USB-to-UART)
+- AVR ISP interface for BIOS flashing
 - runs up to 12 hours on a single CR2032 battery
 
 ## Building your Arduinoflake
@@ -24,11 +23,15 @@ The second option is to manufacture the PCB and get all necessary parts yourself
 
 - ATmega8A TQF32
 - TTP223 SOT23
+- CH340E MSOP-10
 - 18x bright white flat-top crystal clear LEDs
 - 12x bright white 1206 SMD LEDs
 - 18x 68Ω resistors
-- 3x 100nF capacitors
+- 5x 100nF capacitors
+- 50pF capacitor
 - 10kΩ resistor
+- 2x 1kΩ resistors
+- micro USB connector
 - CR2032 battery holder
 - MSK-12C02 power switch
 
@@ -47,13 +50,13 @@ Arduinoflake can be programmed using Arduino IDE. In order to do so, you need to
 
 ### USBasp
 
-[USBasp](https://www.fischl.de/usbasp/) is a cheap $1 board that allows you to connect any ATmega chip with your computer via USB. Including Arduinoflake. It translates USB commands into AVR ISCP commands that can program the processor.
+[USBasp](https://www.fischl.de/usbasp/) is a cheap $1 board that allows you to connect any ATmega chip with your computer via USB. Including Arduinoflake. It translates USB commands into AVR ISP commands that can program the processor.
 
-There is an ISCP interface in the left corner on the back of Arduinoflake. You can either use pogo pins if you have those or solder 6-pin header directly to the board to easily connect your ISCP cable. Before powering it up don't forget to change power on USBasp board to 3.3V.
+There is an ISP interface in the left corner on the back of Arduinoflake. You can either use pogo pins if you have those or solder 6-pin header directly to the board to easily connect your ISP cable. Before powering it up don't forget to change power on USBasp board to 3.3V.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/iscp.png" /><br />
-  <em>AVR ISCP programming interface</em>
+  <em>AVR ISP programming interface</em>
 </p>
 
 ### Arduino as ISP (alternative to USBasp)
