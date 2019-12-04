@@ -68,7 +68,7 @@ Arduinoflake can be programmed using the Arduino IDE. However, the Atmega8 chip 
 
 ### Flashing the bootloader
 
-If you purchased the kit from me, your chip already have a bootloader flashed and can be connected and programmed via USB - skip this part. If you started with a blank microprocessor you need special hardware to upload bootloader to the chip to be able to communicate via USB. If there is a problem with USB programming, it's also wise to try to flash the bootloader again.
+If you purchased the kit from me, your chip already has a bootloader flashed and can be connected and programmed via USB - skip this part. If you started with a blank microprocessor you need special hardware to upload bootloader to the chip to be able to communicate via USB. If there is a problem with USB programming, it's also wise to try to flash the bootloader again.
 
 #### USBasp
 
@@ -89,11 +89,11 @@ You can turn common Arduino UNO or any other Arduino board into programming hard
 
 Do you have your programmer set? Go now to Arduino IDE and with above settings run **Tools > Burn Bootloader**
 
-## Programming the snowflake
-
 ### First upload
 
-Checkout this repository and open [arduinoflake.ino](src/arduinoflake/arduinoflake.ino) project file. Run **Sketch > Upload Using Programmer**. You should get a sweet *'avrdude done. Thank you.'* message at the end of the console. Now you can make your own personalized Arduinoflake.
+Checkout this repository and open [arduinoflake.ino](src/arduinoflake/arduinoflake.ino) project file. Connect your Arduinoflake to your computer via micro USB cable. Make sure you are using smart USB cable, some of the cables are power only and thus cannot transfer data at all. Select the port of your Arduinoflake, it should be the one that just appears. You might need to install a CH340 driver.
+
+Run **Sketch > Upload**. You should get a sweet *'avrdude done. Thank you.'* message at the end of the console. Now you can make your own personalized Arduinoflake.
 
 ![Arduino IDE upload](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-upload.png)
 
