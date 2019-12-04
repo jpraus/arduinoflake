@@ -21,7 +21,7 @@ The second option is to manufacture the PCB and get all necessary parts yourself
 
 ### Board revisions history
 
-- **rev1** - beta
+- **rev1** - no dedicated touch IC
 - **rev2** - public version without USB (2018)
 - **rev3** - private beta with USB
 - **rev4** - public version with USB (2019)
