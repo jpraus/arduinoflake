@@ -19,6 +19,13 @@ The easiest way how to get your own snowflake is to order a DIY kit on my [Tindi
 
 The second option is to manufacture the PCB and get all necessary parts yourself. Arduinoflake is Open-Source. [Schematic](doc/schematic.png) and [Gerber files](gerber/) are included in this repository. Don't forget to share your creation with me, I would love to see that!
 
+### Board revisions history
+
+- **rev1** - beta
+- **rev2** - public version without USB (2018)
+- **rev3** - private beta with USB
+- **rev4** - public version with USB (2019)
+
 ### Parts list
 
 - ATmega8A TQF32
