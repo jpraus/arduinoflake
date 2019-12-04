@@ -10,7 +10,7 @@ Arduinoflake is an awesome winter decoration that will light up every dark night
 - touch button for interactions
 - ATmega8 Arduino compatible microprocessor
 - micro USB interface for programming (CH340 USB-to-UART)
-- AVR ISP interface for BIOS flashing
+- AVR ISP interface for bootloader flashing
 - runs up to 12 hours on a single CR2032 battery
 
 ## Building your Arduinoflake
@@ -51,37 +51,45 @@ Arduinoflake consists of 30 white LEDs grouped into 18 segments. Each group is c
   <em>Arduinoflake LED groups to ATmega8 digital pins mapping</em>
 </p>
 
-## Preparing your environment
+## Connecting snowflake to the computer
 
-Arduinoflake can be programmed using Arduino IDE. In order to do so, you need to have a programmer - special hardware to upload code to microchip - and library installed in Arduino IDE.
+### Installing MiniCore
 
-### USBasp
+Arduinoflake can be programmed using the Arduino IDE. However, the Atmega8 chip is not supported by default and you need to add the support first and configure it.
+
+- Install [MCUdude/MiniCore](https://github.com/MCUdude/MiniCore#how-to-install) device library 
+- Open **Tools > Boards** and select **ATmega8**
+- Select **Tools > Clock > 8 MHz internal**
+- Select **Tools > BOD > Disabled**
+- Select **Tools > Compiler LTO > LTO disabled**
+- Select **Tools > Bootloader > Yes (UART0)**
+
+![Arduino IDE ATmega8](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-atmega8.png)
+
+### Flashing the bootloader
+
+If you purchased the kit from me, your chip already have a bootloader flashed and can be connected and programmed via USB - skip this part. If you started with a blank microprocessor you need special hardware to upload bootloader to the chip to be able to communicate via USB. If there is a problem with USB programming, it's also wise to try to flash the bootloader again.
+
+#### USBasp
 
 [USBasp](https://www.fischl.de/usbasp/) is a cheap $1 board that allows you to connect any ATmega chip with your computer via USB. Including Arduinoflake. It translates USB commands into AVR ISP commands that can program the processor.
 
-There is an ISP interface in the left corner on the back of Arduinoflake. You can either use pogo pins if you have those or solder 6-pin header directly to the board to easily connect your ISP cable. Before powering it up don't forget to change power on USBasp board to 3.3V.
+There is an ISP interface in the left corner on the back of Arduinoflake. You can either use pogo pins if you have those or solder 6-pin header directly to the board to easily connect your ISP cable. Arduinoflake is both 3.3V and 5V tolerant.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/iscp.png" /><br />
   <em>AVR ISP programming interface</em>
 </p>
 
-### Arduino as ISP (alternative to USBasp)
+#### Arduino as ISP (alternative to USBasp)
 
 You can turn common Arduino UNO or any other Arduino board into programming hardware. its a bit messy, but does not require special hardware. [Read](https://www.arduino.cc/en/tutorial/arduinoISP) how to turn your Arduino UNO into a programmer. The rest is same as with USBasp.
 
-### Installing MiniCore
+#### Burn bootloader
 
-It's time to start your Arduino IDE. In order to be able to program Arduinoflake, you need to first add support for ATmega8 device into Arduino IDE and configure it. 
+Do you have your programmer set? Go now to Arduino IDE and with above settings run **Tools > Burn Bootloader**
 
-- Install [MCUdude/MiniCore](https://github.com/MCUdude/MiniCore#how-to-install) device library 
-- Open **Tools > Boards** and select **ATmega8**
-- Select **Tools > Bootloader > No**
-- Select **Tools > Clock > 8 MHz internal**
-- Select **Tools > BOD > Disabled**
-- If you are not working with a Kit run **Tools > Burn Bootloader**
-
-![Arduino IDE ATmega8](https://raw.githubusercontent.com/jpraus/arduinoflake/master/doc/arduinoide-atmega8.png)
+## Programming the snowflake
 
 ### First upload
 
