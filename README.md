@@ -17,7 +17,7 @@ Arduinoflake is an awesome winter decoration that will light up every dark night
 
 The easiest way how to get your own snowflake is to order a DIY kit on my [Tindie Store](https://www.tindie.com/products/jiripraus/arduinoflake/). Kit contains professionally manufactured PCBs by PCBway and all compatible components needed to assemble a fully functional Arduinoflake.
 
-The second option is to manufacture the PCB and get all necessary parts yourself. Arduinoflake is Open-Source. [Schematic](doc/schematic.png) and [Gerber files](gerber/) are included in this repository. Don't forget to share your creation with me, I would love to see that!
+The second option is to manufacture the PCB and get all necessary parts yourself. Arduinoflake is Open-Source. [Schematic](doc/schematic_rev4.png) and [Gerber files](gerber/) are included in this repository. Don't forget to share your creation with me, I would love to see that!
 
 ### Board revisions history
 
